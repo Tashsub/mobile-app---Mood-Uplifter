@@ -5,6 +5,9 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 import json
 from datetime import datetime
+import glob
+from pathlib import Path
+import random
 
 #the front end willbe designed using kivy. CXonnect using Builder 
 #where as the logic will be in python
@@ -29,8 +32,6 @@ class LoginScreen(Screen):
             self.ids.error_login.text = "Password or Username is incorrect. Try Again"
 
         
-
-
 class SignUpScreen(Screen):
     def add_user(self, name, passw):
 
@@ -45,6 +46,10 @@ class SignUpScreen(Screen):
             json.dump(users, file)
         self.manager.current = "sign_up_success"
 
+    def back_to_home(self):
+        self.manager.transition.direction = "left"
+        self.manager.current= "login_screen"
+
         
 class SignUpSuccess(Screen):
     def back_to_mainpage(self):
@@ -52,8 +57,44 @@ class SignUpSuccess(Screen):
 
 class LoginSuccess(Screen):
     def logout(self):
-        self.manager.transition.direction = "left"
+        self.manager.transition.direction = "right"
         self.manager.current = "login_screen"
+
+    #read each file and assign it a value
+
+    #happy
+    def quotes(self, word):
+
+        feels = glob.glob("quotes/*txt")
+        feels_without_txt = [Path(filename).stem for filename in feels]
+
+
+        #open all files
+        word = word.lower()
+        if word in feels_without_txt:
+            with open(f"quotes/{word}.txt", encoding='utf-8') as file:
+                quotes = file.readlines()
+                size = len(quotes)
+                chosen_quote_num = random.randint(0,(size-1)) 
+                self.ids.show_quote.text = quotes[chosen_quote_num]
+        else: 
+            with open("quotes/random.txt") as file: 
+                quotes = file.readlines()
+                size = len(quotes)
+                chosen_quote_num = random.randint(0,(size-1)) 
+                self.ids.show_quote.text = quotes[chosen_quote_num]
+
+
+                
+                
+
+
+    #sad
+
+    #unloved
+
+
+        
 
     #def get_word(self, word):
         
