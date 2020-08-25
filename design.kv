@@ -17,10 +17,39 @@
                 text: "Forgot Password?"
             Button:
                 text: "Sign Up"
+                on_press: root.sign_up()
+
+<SignUpScreen>
+    GridLayout:
+        cols:1
+        Label:
+            text:"Sign up to feel better"
+        TextInput:
+            id: username
+            hint_text:"Username"
+        TextInput: 
+            id: password
+            hint_text:"Password"
+        Button: 
+            text:"Submit"
+            on_press: root.add_user(root.ids.username.text, root.ids.password.text)
+
+<SignUpSuccess>
+    GridLayout:
+        Cols:1
+        Label:
+            text: "Thank you for signing up"
+        Button:
+            text: "Login"
+            
 
 <RootWidget>: 
     LoginScreen: 
         name: "login_screen"
+    SignUpScreen:
+        name: "sign_up_screen"
+    SignUpSuccess:
+        name :"sign_up_success"
 
 
 
