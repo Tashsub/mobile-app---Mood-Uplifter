@@ -8,11 +8,17 @@ from datetime import datetime
 import glob
 from pathlib import Path
 import random
+import os
 
 #the front end willbe designed using kivy. CXonnect using Builder 
 #where as the logic will be in python
 
 Builder.load_file('design.kv')
+
+
+cwd = os.getcwd()
+files = os.listdir(cwd)
+print("Files in %r: %s" % (cwd, files))
 
 class LoginScreen(Screen):
     def sign_up(self):
@@ -24,10 +30,14 @@ class LoginScreen(Screen):
             users = json.load(file) 
         #checking username exists match it against the password stored
         #for that username
-        person = users[name]
-        stored_password = person["password"]
-        if name in users and stored_password == passw: 
-            self.manager.current = "login_success"
+        try: 
+            person = users[name]
+            stored_password = person["password"]
+            if name in users and stored_password == passw: 
+                self.manager.current = "login_success"
+        except KeyError: 
+            self.ids.error_login.text = "Password or Username is incorrect. Try Again"    
+
         else: 
             self.ids.error_login.text = "Password or Username is incorrect. Try Again"
 
@@ -68,7 +78,6 @@ class LoginSuccess(Screen):
         feels = glob.glob("quotes/*txt")
         feels_without_txt = [Path(filename).stem for filename in feels]
 
-
         #open all files
         word = word.lower()
         if word in feels_without_txt:
@@ -85,19 +94,6 @@ class LoginSuccess(Screen):
                 self.ids.show_quote.text = quotes[chosen_quote_num]
 
 
-                
-                
-
-
-    #sad
-
-    #unloved
-
-
-        
-
-    #def get_word(self, word):
-        
 class RootWidget(ScreenManager): 
     pass
 
